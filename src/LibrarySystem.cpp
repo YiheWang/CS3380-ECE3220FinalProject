@@ -95,5 +95,7 @@ int main() {
 	printf("%c\n",22);
 
 	cout << "!!!Hello World!!!" << endl; // prints !!!Hello World!!!
+    
+    cout << " - "<< endl; 
 	return 0;
 }
