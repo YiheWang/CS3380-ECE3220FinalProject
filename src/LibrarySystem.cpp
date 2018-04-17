@@ -29,7 +29,7 @@ class Book{
 		int appointNumber;//how many people appoint this book
 		int borrowTimes;//how many times this book was borrowed
 		bool ifReadOnly;//identify this book is read only or can be borrowed
-		string lastReturnTime;//last time this book return to library
+		//string lastReturnTime;//last time this book return to library
 		string lastBorrowTime;//last time this book was borrowed
 		string library;//this book is in which library of University
 
@@ -37,19 +37,46 @@ class Book{
 
 	public:
 		//fill constructors here
-
-		void setReturnTime();
-		void setBorrowTime();
-		void addBookNum();//add book number
-		void deleteBookNum();//delete book number
+		Book(int,string,string,string,double,
+				int,int,int,int,bool,string,string);
+		~Book();
+		//void setReturnTime();
+		//void setBorrowTime();
+		//void addBookNum();//add book number
+		//void deleteBookNum();//delete book number
 		//void getBookMessage();//get book information from file or database
-		void printBookMessage();//print out the information of book
+		//void printBookMessage();//print out the information of book
 
 };
 
+Book::Book(int id, string name, string author, string category, double price,
+		int sumNumber, int nowNumber, int appointNumber, int borrowTimes,
+		bool ifReadOnly, string lastBorrowTime, string library){
+	this->id = id;
+	this->name = name;
+	this->author = author;
+	this->category = category;
+	this->price = price;
+	this->sumNumber = sumNumber;
+	this->nowNumber = nowNumber;
+	this->appointNumber = appointNumber;
+	this->borrowTimes = borrowTimes;
+	this->ifReadOnly = ifReadOnly;
+	this->lastBorrowTime = lastBorrowTime;
+	this->library = library;
+}
+
 class LibrarySystem{
+	private:
+		void readFile();//read the file store the book information
 	protected:
 		vector<Book> books;
+
+		virtual void printMessage() = 0;//pure virtual function
+		virtual void printView()=0;//pure virtual function
+	public:
+		LibrarySystem();
+		virtual ~LibrarySystem();
 
 };
 
@@ -67,8 +94,9 @@ class StudentSystem : public LibrarySystem{
 		//fill constructors here
 
 
-		void printMessage();//print out the message of student
-		void printView();//create the scene of student view and print out the choices
+		void printMessage();//print out the message of student,override function
+		void printView();
+		//create the scene of student view and print out the choices, override function
 		void borrowBook();//borrow a book
 		void returnBook();//return a book
 		void removeHistory();//delete borrow history
@@ -85,6 +113,8 @@ class LibrarianSystem : public LibrarySystem{
 		//fill constructors here
 
 
+		void printMessage();//override function
+		void printView();//override function
 		void addNewBook();//add new book
 		void deleteBook();//delete book
 		void updateBookInfo();//update the book information
