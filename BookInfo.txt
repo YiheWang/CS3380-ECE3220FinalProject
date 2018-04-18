@@ -1,0 +1,21 @@
+1 A-Certain-Magic-Index Kazuma-Kamachi light-novel 15$ 10 7 0 150 false 2018-4-17-10:56AM Ellise-Library
+2 Around-the-World-in-Eighty-Days Jules-Gabriel-Verne Adventure-Novel 20$ 2 0 4 false 2018-4-6-3:48PM Ellise-Library
+11 To-Kill-a-Mockingbird Harper-Lee Bildungsroman 10$ 10 7 0 189 false 2018-3-12-09:45AM Ellise-Library
+
+12 The-Hobbit J.R.R.-Tolkien Fantasy-Novel 17$ 13 5 0 234 false 2018-2-11-12:57PM Ellis-Library
+
+13 Pride-and-Prejudice Jane-Austen Bildungsroman 15$ 20 11 0 323 false 2018-4-1-11:04AM Ellis-Library
+
+14 Harry-Potter-and-the-Philosopher’s-Stone J.K.-Rowling Adventure-Novel 30$ 32 25 0 451 false 2018-4-15-9:44AM Ellis-Library 
+
+15 Dragon-Raja-1 Jiang-Nan Adventure-Novel 18$ 20 13 0 123 false 2018-3-16-10:30PM Ellis-Library
+
+16 Dragon-Raja-2 Jiang-Nan Adventure-Novel 19$ 20 18 0 110 false 2018-2-19-11:12PM Ellis-Library
+
+17 Dragon-Raja-3 Jiang-Nan Adventure-Novel 23$ 20 10 0 181 false 2018-4-20-9:42PM Ellis-Library
+
+18 1984 George-Orwell War-Novel 18$ 34 28 0 178 false 2017-12-24-11:32AM Ellis-Library
+
+19 The-Adventure-of-Sherlock-Holmes Arthur-Conan-Doyle Adventure-Novel 15 10 0 120 false 2018-3-13-8:11AM Ellis-Library
+
+20 The-Old-Man-and-The-Sea Ernest-Miller-Hemingway War-Novel 10$ 20 13 0 123 false 2018-1-23-15:21PM Ellis-Library

@@ -17,6 +17,13 @@
 #include "windows.h"
 using namespace std;
 
+string getLocalTime()
+{
+	string time;//fill this function later
+
+	return time;
+}
+
 class Book{
 	private:
 		int id;
@@ -29,11 +36,10 @@ class Book{
 		int appointNumber;//how many people appoint this book
 		int borrowTimes;//how many times this book was borrowed
 		bool ifReadOnly;//identify this book is read only or can be borrowed
-		//string lastReturnTime;//last time this book return to library
 		string lastBorrowTime;//last time this book was borrowed
 		string library;//this book is in which library of University
 
-		string getLocalTime();
+		//string getLocalTime();
 
 	public:
 		//fill constructors here
@@ -66,34 +72,174 @@ Book::Book(int id, string name, string author, string category, double price,
 	this->library = library;
 }
 
+Book::~Book()
+{
+	//do nothing
+}
+
+class Student{
+	private:
+		int pawPrint;//id in the university
+		string password;
+		string name;//student name
+		int historyBorrowNum;//book borrow number totally in history record
+		string lastBorrowTime;//last time borrow book
+		int holdNum;//how many book hold now
+		vector<int> bookId;//store the id of book student borrowed
+	public:
+		Student(int,string,string,int,string,int,vector<int>);
+		~Student();
+};
+
+Student::Student(int pawPrint,string password,string name,
+		int historyBorrowNum,string lastBorrowTime,int holdNum,vector<int> bookId){
+	this->pawPrint = pawPrint;
+	this->password = password;
+	this->name = name;
+	this->historyBorrowNum = historyBorrowNum;
+	this->lastBorrowTime = lastBorrowTime;
+	this->holdNum = holdNum;
+	this->bookId = bookId;
+}
+
+Student::~Student()
+{
+	bookId.clear();
+}
+
+class StudentList{
+	private:
+		vector<Student> studentList;
+
+		void readFile();
+	public:
+		StudentList();
+		~StudentList();
+};
+
+StudentList::StudentList()
+{
+	readFile();
+}
+
+StudentList::~StudentList()
+{
+	studentList.clear();
+}
+
+void StudentList::readFile()
+{
+	string fileName = "BookInfo.txt";
+	ifstream in;
+	in.open(fileName);
+	if(!in.is_open()){
+		cerr<<"File open failed!"<<endl;
+	}
+
+	char line[1024];
+	while(!in.eof()){
+		in.getline(line,sizeof(line),'\n');
+		stringstream word(line);
+		string pawPrint;
+		word>>pawPrint;
+		string password;
+		word>>password;
+		string name;
+		word>>name;
+		int historyBorrowNum;
+		word>>historyBorrowNum;
+		string lastBorrowTime;
+		word>>lastBorrowTime;
+		int holdNum;
+		word>>holdNum;
+		vector<int> bookId;
+		for(int i = holdNum; holdNum > 0;--i){
+			int temp;
+			word>>temp;
+			bookId.push_back(temp);
+		}
+
+		Student student(pawPrint,password,name,historyBorrowNum,
+				lastBorrowTime,holdNum,bookId);
+		studentList.push_back(student);
+	}//read the file until end and put it in object Book
+}
+
 class LibrarySystem{
 	private:
 		void readFile();//read the file store the book information
 	protected:
-		vector<Book> books;
+		vector<Book> bookList;
 
 		virtual void printMessage() = 0;//pure virtual function
-		virtual void printView()=0;//pure virtual function
+		virtual void printView() = 0;//pure virtual function
 	public:
 		LibrarySystem();
 		virtual ~LibrarySystem();
 
 };
 
+LibrarySystem::LibrarySystem()
+{
+	readFile();//read book information from file and store them in vector books
+}
+
+LibrarySystem::~LibrarySystem()
+{
+	bookList.clear();//free the memory
+}
+
+void LibrarySystem::readFile()
+{
+	string fileName = "BookInfo.txt";
+	ifstream in;
+	in.open(fileName);
+	if(!in.is_open()){
+		cerr<<"File open failed!"<<endl;
+	}
+
+	char line[1024];
+	while(!in.eof()){
+		in.getline(line,sizeof(line),'\n');
+		stringstream word(line);
+		int id;
+		word>>id;
+		string name;
+		word>>name;
+		string author;
+		word>>author;
+		string category;
+		word>>category;
+		double price;
+		word>>price;
+		int sumNumber;
+		word>>sumNumber;
+		int nowNumber;
+		word>>nowNumber;
+		int appointNumber;
+		word>>appointNumber;
+		int borrowTimes;
+		word>>borrowTimes;
+		bool ifReadOnly;
+		word>>ifReadOnly;
+		string lastBorrowTime;
+		word>>lastBorrowTime;
+		string library;
+		word>>library;//read information word by word
+
+		Book book(id,name,author,category,price,sumNumber,nowNumber,
+				appointNumber,borrowTimes,ifReadOnly,lastBorrowTime,library);
+		bookList.push_back(book);//
+	}//read the file until end and put it in object Book
+}
+
 class StudentSystem : public LibrarySystem{
 	private:
-		int pawPrint;//id in the university
-		string password;
-		string name;//student name
-		int historyBorrowNum;//book borrow number totally in history record
-		int holdNum;//how many book hold now
-		int maxHoldNum;//the maximum number of books students can hold
-		vector<int> bookId;//store the id of book student borrowed
-		string lastBorrowTime;
+		StudentList *studentList;
 	public:
 		//fill constructors here
-
-
+		StudentSystem(StudentList*);
+		~StudentSystem();
 		void printMessage();//print out the message of student,override function
 		void printView();
 		//create the scene of student view and print out the choices, override function
@@ -103,6 +249,16 @@ class StudentSystem : public LibrarySystem{
 		void changePassword();//change the password of id
 		void appointBook();//appoint a book if all were borrowed
 };
+
+StudentSystem::StudentSystem(StudentList* studentList)
+{
+	this->studentList = studentList;
+}
+
+StudentSystem::~StudentSystem()
+{
+	free(studentList);
+}
 
 class LibrarianSystem : public LibrarySystem{
 	private:
@@ -119,6 +275,14 @@ class LibrarianSystem : public LibrarySystem{
 		void deleteBook();//delete book
 		void updateBookInfo();//update the book information
 };
+
+StudentList *CheckInentity(StudentList* studentList,string pawPrint,string password)
+{
+	//if information match, return studentList
+	//if information not match, return null;
+	//remeber to check error in main
+	return studentList;
+}//change to binary search later
 
 int main() {
 	//SetConsoleOutputCP(437);
