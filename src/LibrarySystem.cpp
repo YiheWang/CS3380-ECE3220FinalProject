@@ -39,20 +39,16 @@ class Book{
 		string lastBorrowTime;//last time this book was borrowed
 		string library;//this book is in which library of University
 
-		//string getLocalTime();
-
 	public:
 		//fill constructors here
 		Book(int,string,string,string,double,
 				int,int,int,int,bool,string,string);
 		~Book();
-		//void setReturnTime();
-		//void setBorrowTime();
-		//void addBookNum();//add book number
-		//void deleteBookNum();//delete book number
-		//void getBookMessage();//get book information from file or database
-		//void printBookMessage();//print out the information of book
-
+		//fill all the getter and setter
+		//
+		//
+		//
+		//
 };
 
 Book::Book(int id, string name, string author, string category, double price,
@@ -79,7 +75,7 @@ Book::~Book()
 
 class Student{
 	private:
-		int pawPrint;//id in the university
+		string pawPrint;//id in the university
 		string password;
 		string name;//student name
 		int historyBorrowNum;//book borrow number totally in history record
@@ -89,10 +85,19 @@ class Student{
 	public:
 		Student(int,string,string,int,string,int,vector<int>);
 		~Student();
+		string getPawPrint(){return pawPrint;}
+		void setPawPrint(string pawPrint){this->pawPrint = pawPrint;}
+		string getPassword(){return password;}
+		void setPassWord(string password){this->password = password;}
+		//fill all the getter and setter
+		//
+		//
+		//
 };
 
 Student::Student(int pawPrint,string password,string name,
-		int historyBorrowNum,string lastBorrowTime,int holdNum,vector<int> bookId){
+		int historyBorrowNum,string lastBorrowTime,int holdNum,vector<int> bookId)
+{
 	this->pawPrint = pawPrint;
 	this->password = password;
 	this->name = name;
@@ -109,7 +114,7 @@ Student::~Student()
 
 class StudentList{
 	private:
-		vector<Student> studentList;
+		vector<Student> list;
 
 		void readFile();
 	public:
@@ -124,7 +129,7 @@ StudentList::StudentList()
 
 StudentList::~StudentList()
 {
-	studentList.clear();
+	list.clear();
 }
 
 void StudentList::readFile()
@@ -161,7 +166,7 @@ void StudentList::readFile()
 
 		Student student(pawPrint,password,name,historyBorrowNum,
 				lastBorrowTime,holdNum,bookId);
-		studentList.push_back(student);
+		list.push_back(student);
 	}//read the file until end and put it in object Book
 }
 
@@ -276,20 +281,46 @@ class LibrarianSystem : public LibrarySystem{
 		void updateBookInfo();//update the book information
 };
 
-StudentList *CheckInentity(StudentList* studentList,string pawPrint,string password)
+StudentList* checkStudentIdentity(StudentList* studentList,string pawPrint,string password)
 {
-	//if information match, return studentList
-	//if information not match, return null;
-	//remeber to check error in main
-	return studentList;
+	int i = 0;
+	while(studentList != NULL){
+		if(studentList->list[i].pawPrint == pawPrint){
+			if(studentList->list[i].password == password){
+				return studentList;
+			}//check if the paw print and password match
+		}
+		++i;
+	}
+	return NULL;
 }//change to binary search later
 
 int main() {
-	//SetConsoleOutputCP(437);
-	printf("%c\n",22);
+	StudentList studentList;
+	int identityChoice;
+	string pawPrint;
+	string password;
 
-	cout << "!!!Hello World!!!" << endl; // prints !!!Hello World!!!
-    
-    cout << " - "<< endl; 
+	cout<<"1)Student log in enter 1 "<<endl;
+	cout<<"2)Librarian log in enter 2"<<endl;
+	cin>>identityChoice;
+
+	if(identityChoice ==1 ){
+		cout<<"Please enter your pawprint:";
+		cin>>pawPrint;
+		cout<<"Please enter your password:";
+		cin>>password;
+		if(checkStudentIdentity(&studentList,pawPrint,password) == NULL){
+			cout<<"Your User ID and/or Password are invalid."<<endl;
+		}
+		else{
+			cout<<"Welcome to library! What you want to do?"<<endl;
+			//fill different options here
+			//
+			//
+			//
+		}
+	}
+
 	return 0;
 }
