@@ -14,7 +14,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <cmath>
-#include "windows.h"
+#include<time.h>
+
+//#include "windows.h"
 using namespace std;
 
 string getLocalTime()
