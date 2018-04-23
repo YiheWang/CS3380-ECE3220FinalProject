@@ -24,9 +24,18 @@ string getLocalTime()
     
     time ( &rawtime );
     timeinfo = localtime ( &rawtime );
-    string stime;
+    string ftime;
+    char  *stime;
     stime = asctime (timeinfo);
-    return stime;//change to format like 2018-4-17-10:56AM
+    
+    for(int i =0; i<30;i++){
+        
+        if (stime[i] == ' ' )
+            stime [i] = '-';
+    }
+    
+    ftime = stime;
+    return ftime;
 }
 
 class Book{
@@ -102,10 +111,8 @@ Book::~Book()
 
 void Book::printBookInfo()
 {
-	//fill them later
-	//
-	//
-	//
+    cout<<"id"<<id<<"name"<<name<<"author"<<author<<"category"<<category<<"price"<<price<<"sumNumber"<<sumNumber<<"nowNumber"<<nowNumber<<"borrowTimes"<<borrowTimes
+    <<"ifReadOnly"<<ifReadOnly<<"lastBorrowTime"<<lastBorrowTime<<"library"<<library<<endl;
 }
 
 class Student{
