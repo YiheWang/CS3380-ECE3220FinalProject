@@ -14,19 +14,19 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <cmath>
-#include<time.h>
+#include <ctime>
 using namespace std;
 
 string getLocalTime()
 {
-	string stime;//fill this function later
     time_t rawtime;
     struct tm * timeinfo;
     
-    time (&rawtime);
-    timeinfo = localtime (&rawtime);
-    stime = asctime(timeinfo);
-	return stime;
+    time ( &rawtime );
+    timeinfo = localtime ( &rawtime );
+    string stime;
+    stime = asctime (timeinfo);
+    return stime;//change to format like 2018-4-17-10:56AM
 }
 
 class Book{
