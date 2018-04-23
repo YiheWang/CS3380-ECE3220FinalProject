@@ -14,7 +14,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <cmath>
-#include "windows.h"
 using namespace std;
 
 string getLocalTime()
@@ -33,7 +32,7 @@ class Book{
 		double price;//price of this book
 		int sumNumber;// sum number of this book in library
 		int nowNumber;//the number of book in library now
-		int appointNumber;//how many people appoint this book
+		//int appointNumber;//how many people appoint this book
 		int borrowTimes;//how many times this book was borrowed
 		bool ifReadOnly;//identify this book is read only or can be borrowed
 		string lastBorrowTime;//last time this book was borrowed
@@ -41,9 +40,26 @@ class Book{
 
 	public:
 		//fill constructors here
+		Book();
 		Book(int,string,string,string,double,
-				int,int,int,int,bool,string,string);
+				int,int,int,bool,string,string);
 		~Book();
+		void printBookInfo();//print out book information
+		int getId(){return id;}
+		string getName(){return name;}
+		string getAuthor(){return author;}
+		string getCategory(){return category;}
+		double getPrice(){return price;}
+		int getSumNumber(){return sumNumber;}
+		int getNowNumber(){return nowNumber;}
+		//int getAppointNumber(){return appointNumber;}
+		int getBorrowTimes(){return borrowTimes;}
+		bool getIfReadOnly(){return ifReadOnly;}
+		string getLastBorrowTime(){return lastBorrowTime;}
+		string getLibrary(){return library;}
+		void setNowNumber(int nowNumber){this->nowNumber = nowNumber;}
+		//void setAppointNumber(int appointNumber){this->appointNumber = appointNumber;}
+		void setLastBorrowTime(string lastBorrowTime){this->lastBorrowTime = lastBorrowTime;}
 		//fill all the getter and setter
 		//
 		//
@@ -51,8 +67,13 @@ class Book{
 		//
 };
 
+Book::Book()
+{
+	//do nothing
+}
+
 Book::Book(int id, string name, string author, string category, double price,
-		int sumNumber, int nowNumber, int appointNumber, int borrowTimes,
+		int sumNumber, int nowNumber, int borrowTimes,
 		bool ifReadOnly, string lastBorrowTime, string library){
 	this->id = id;
 	this->name = name;
@@ -61,7 +82,7 @@ Book::Book(int id, string name, string author, string category, double price,
 	this->price = price;
 	this->sumNumber = sumNumber;
 	this->nowNumber = nowNumber;
-	this->appointNumber = appointNumber;
+	//this->appointNumber = appointNumber;
 	this->borrowTimes = borrowTimes;
 	this->ifReadOnly = ifReadOnly;
 	this->lastBorrowTime = lastBorrowTime;
@@ -71,6 +92,14 @@ Book::Book(int id, string name, string author, string category, double price,
 Book::~Book()
 {
 	//do nothing
+}
+
+void Book::printBookInfo()
+{
+	//fill them later
+	//
+	//
+	//
 }
 
 class Student{
@@ -83,20 +112,34 @@ class Student{
 		int holdNum;//how many book hold now
 		vector<int> bookId;//store the id of book student borrowed
 	public:
-		Student(int,string,string,int,string,int,vector<int>);
+		Student();
+		Student(string,string,string,int,string,int,vector<int>);
 		~Student();
 		string getPawPrint(){return pawPrint;}
-		void setPawPrint(string pawPrint){this->pawPrint = pawPrint;}
 		string getPassword(){return password;}
+		string getName(){return name;}
+		int getHistoryBorrowNum(){return historyBorrowNum;}
+		string getLastBorrowTime(){return lastBorrowTime;}
+		int getHoldNum(){return holdNum;}
+		vector<int> getBookId(){return bookId;}
 		void setPassWord(string password){this->password = password;}
-		//fill all the getter and setter
+		void setHistoryBorrowNum(int historyBorrowNum){this->historyBorrowNum = historyBorrowNum;}
+		void setLastBorrowTime(string lastBorrowTime){this->lastBorrowTime = lastBorrowTime;}
+		void setHoldNum(int holdNum){this->holdNum = holdNum;}
+		void setBookId(vector<int> bookId){this->bookId = bookId;}
+		//return or borrow book
 		//
 		//
 		//
+
 };
 
-Student::Student(int pawPrint,string password,string name,
-		int historyBorrowNum,string lastBorrowTime,int holdNum,vector<int> bookId)
+Student::Student()
+{
+	//do nothing
+}
+
+Student::Student(string pawPrint,string password,string name,int historyBorrowNum,string lastBorrowTime,int holdNum,vector<int> bookId)
 {
 	this->pawPrint = pawPrint;
 	this->password = password;
@@ -112,12 +155,39 @@ Student::~Student()
 	bookId.clear();
 }
 
+class Librarian{
+	private:
+		string pawPrint;
+		string password;
+		string name;
+	public:
+		Librarian(string,string,string);
+		~Librarian();
+		string getPawPrint(){return pawPrint;}
+		string getPassword(){return password;}
+		string getName(){return name;}
+		void setPawPrint(string pawPrint){this->pawPrint = pawPrint;}
+		void setPassword(string password){this->password = password;}
+		void setName(string name){this->name =name;}
+};
+
+Librarian::Librarian(string pawPrint,string password,string name)
+{
+	this->pawPrint = pawPrint;
+	this->password = password;
+	this->name = name;
+}
+
+Librarian::~Librarian()
+{
+	//do nothing
+}
+
 class StudentList{
 	private:
-		vector<Student> list;
-
 		void readFile();
 	public:
+		vector<Student> list;
 		StudentList();
 		~StudentList();
 };
@@ -134,7 +204,7 @@ StudentList::~StudentList()
 
 void StudentList::readFile()
 {
-	string fileName = "BookInfo.txt";
+	string fileName = "StudentInfo.txt";
 	ifstream in;
 	in.open(fileName);
 	if(!in.is_open()){
@@ -170,6 +240,50 @@ void StudentList::readFile()
 	}//read the file until end and put it in object Book
 }
 
+class LibrarianList{
+	private:
+		void readFile();
+	public:
+		vector<Librarian> list;
+		LibrarianList();
+		~LibrarianList();
+};
+
+LibrarianList::LibrarianList()
+{
+	readFile();
+}
+
+LibrarianList::~LibrarianList()
+{
+	list.clear();
+}
+
+void LibrarianList::readFile()
+{
+	string fileName = "LibrarianInfo.txt";
+	ifstream in;
+	in.open(fileName);
+	if(!in.is_open()){
+		cerr<<"File open failed!"<<endl;
+	}
+
+	char line[1024];
+	while(!in.eof()){
+		in.getline(line,sizeof(line),'\n');
+		stringstream word(line);
+		string pawPrint;
+		word>>pawPrint;
+		string password;
+		word>>password;
+		string name;
+		word>>name;
+
+		Librarian librarian(pawPrint,password,name);
+		list.push_back(librarian);
+	}//read the file until end and put it in object Book
+}
+
 class LibrarySystem{
 	private:
 		void readFile();//read the file store the book information
@@ -178,6 +292,7 @@ class LibrarySystem{
 
 		virtual void printMessage() = 0;//pure virtual function
 		virtual void printView() = 0;//pure virtual function
+		virtual void updateFile() = 0;//update changed information into file
 	public:
 		LibrarySystem();
 		virtual ~LibrarySystem();
@@ -221,8 +336,6 @@ void LibrarySystem::readFile()
 		word>>sumNumber;
 		int nowNumber;
 		word>>nowNumber;
-		int appointNumber;
-		word>>appointNumber;
 		int borrowTimes;
 		word>>borrowTimes;
 		bool ifReadOnly;
@@ -233,7 +346,7 @@ void LibrarySystem::readFile()
 		word>>library;//read information word by word
 
 		Book book(id,name,author,category,price,sumNumber,nowNumber,
-				appointNumber,borrowTimes,ifReadOnly,lastBorrowTime,library);
+				borrowTimes,ifReadOnly,lastBorrowTime,library);
 		bookList.push_back(book);//
 	}//read the file until end and put it in object Book
 }
@@ -241,28 +354,143 @@ void LibrarySystem::readFile()
 class StudentSystem : public LibrarySystem{
 	private:
 		StudentList *studentList;
-	public:
-		//fill constructors here
-		StudentSystem(StudentList*);
-		~StudentSystem();
-		void printMessage();//print out the message of student,override function
-		void printView();
-		//create the scene of student view and print out the choices, override function
-		void borrowBook();//borrow a book
+		Student student;
+		int indexInList;
+
+		void searchBook();
+		void borrowBook(int);//borrow a book
 		void returnBook();//return a book
 		void removeHistory();//delete borrow history
 		void changePassword();//change the password of id
-		void appointBook();//appoint a book if all were borrowed
+	public:
+		//fill constructors here
+		StudentSystem(StudentList*,Student,int);
+		~StudentSystem();
+		void printMessage();//print out the message of student,override function
+		void printView();//call private class method to show different choices
+		//create the scene of student view and print out the choices, override function
+		void updateFile();
 };
 
-StudentSystem::StudentSystem(StudentList* studentList)
+StudentSystem::StudentSystem(StudentList* studentList, Student student, int indexInList)
 {
 	this->studentList = studentList;
+	this->student = student;
+	this->indexInList = indexInList;
 }
 
 StudentSystem::~StudentSystem()
 {
+	updateFile();//update all information(student, book)
 	free(studentList);
+}
+
+void StudentSystem::searchBook()
+{
+	int searchType;
+	Book book;
+	cout<<"Search by id enter 1: ";
+	cout<<"Search by name enter 2: ";
+	cout<<"Search by category enter 3: ";
+	cin>>searchType;
+	if(searchType>3||searchType<1){
+		cout<<"Search failed!"<<endl;
+		return;
+	}
+	else{
+		switch(searchType){
+			case 1:{
+				//search by id
+				int id;
+				cout<<"Please enter the book id";
+				cin>>id;
+				bookList[id].printBookInfo();//print out new borrowed book
+				borrowBook(id);//call borrow book function
+				break;
+			}
+			case 2:{
+				string tempBookName;
+				cout<<"Please enter the name as following format. "
+						"Capitalize each single word and use '-' to"
+						"connect each word like: Harry-Potter "<<endl;
+				cout<<"Please enter the name of this book";
+				cin>>tempBookName;
+				for(int i = 0; i < (int)bookList.size(); ++i){
+					if(bookList[i].getName() == tempBookName){
+						bookList[i].printBookInfo();
+						borrowBook(i);
+					}
+				}//search by name
+				break;
+			}
+			case 3:{
+				string category;
+				int tempId;
+				cout<<"Please enter the category of this book";
+				cin>>category;
+				for(int i = 0; i < (int)bookList.size(); ++i){
+					if(bookList[i].getCategory() == category){
+						bookList[i].printBookInfo();
+					}
+				}//print out all the match book
+				cout<<"Which one you want to borrow? Please enter the book id:";
+				cin>>tempId;
+				borrowBook(tempId);
+				break;
+			}
+		}
+	}
+}
+
+void StudentSystem::borrowBook(int id)
+{
+	int choice;
+	int nowNumber = bookList[id].getNowNumber();
+	if(nowNumber){
+		cout<<"Do you want to borrow "<<bookList[id].getName()<<"? Yes:1, No:0";
+		cin>>choice;
+			if(choice == 1){
+				student.getBookId().push_back(id);
+				student.setHistoryBorrowNum(student.getHistoryBorrowNum() + 1);
+				student.setLastBorrowTime(getLocalTime());
+				bookList[id].setLastBorrowTime(getLocalTime());//update borrow time
+				bookList[id].setNowNumber(--nowNumber);//update book number now
+		}//borrow this book
+	}
+	else{
+		cout<<"All "<<bookList[id].getName()<<" were borrowed,"
+				"you can connect librarian for further information"<<endl;
+	}//All books were borrowed
+}
+
+void StudentSystem::updateFile()
+{
+	studentList->list[indexInList] = student;//update student information
+	//update all student information
+	ofstream out;
+	//rewrite the file studentInfo with new student data
+	//remember to upload the id
+	//
+	//
+	//rewrite  the file bookInfo with new book data
+	//remember to unload the id
+	//
+	//
+}
+
+void StudentSystem::printMessage()
+{
+	cout<<"This is your current status"<<endl;
+	cout<<"Name: "<<student.getName()<<endl;
+	cout<<"Total times you borrowed book"<<student.getHistoryBorrowNum()<<endl;
+	cout<<"Last time borrowed book: "<<student.getLastBorrowTime()<<endl;
+	cout<<"Number of books you hold: "<<student.getHoldNum()<<endl;
+	cout<<"Here is name of books you keep: ";
+	vector<int> bookId = student.getBookId();
+	for(int i = 0; i<student.getHoldNum(); ++i){
+		cout<<bookList[bookId[i]].getName()<<" ";
+	}
+	cout<<endl;
 }
 
 class LibrarianSystem : public LibrarySystem{
@@ -281,18 +509,18 @@ class LibrarianSystem : public LibrarySystem{
 		void updateBookInfo();//update the book information
 };
 
-StudentList* checkStudentIdentity(StudentList* studentList,string pawPrint,string password)
+int checkStudentIdentity(StudentList* studentList,string pawPrint,string password)
 {
 	int i = 0;
 	while(studentList != NULL){
-		if(studentList->list[i].pawPrint == pawPrint){
-			if(studentList->list[i].password == password){
-				return studentList;
+		if(studentList->list[i].getPawPrint() == pawPrint){
+			if(studentList->list[i].getPassword() == password){
+				return i;
 			}//check if the paw print and password match
 		}
 		++i;
 	}
-	return NULL;
+	return -1;
 }//change to binary search later
 
 int main() {
@@ -310,15 +538,14 @@ int main() {
 		cin>>pawPrint;
 		cout<<"Please enter your password:";
 		cin>>password;
-		if(checkStudentIdentity(&studentList,pawPrint,password) == NULL){
+		int index = checkStudentIdentity(&studentList,pawPrint,password);
+		if(index < 0){
 			cout<<"Your User ID and/or Password are invalid."<<endl;
 		}
 		else{
+			StudentSystem studentSystem(&studentList,studentList.list[index],index);
 			cout<<"Welcome to library! What you want to do?"<<endl;
-			//fill different options here
-			//
-			//
-			//
+
 		}
 	}
 

@@ -1,21 +1,24 @@
-1 A-Certain-Magic-Index Kazuma-Kamachi light-novel 15$ 10 7 0 150 false 2018-4-17-10:56AM Ellise-Library
-2 Around-the-World-in-Eighty-Days Jules-Gabriel-Verne Adventure-Novel 20$ 2 0 4 false 2018-4-6-3:48PM Ellise-Library
-11 To-Kill-a-Mockingbird Harper-Lee Bildungsroman 10$ 10 7 0 189 false 2018-3-12-09:45AM Ellise-Library
-
-12 The-Hobbit J.R.R.-Tolkien Fantasy-Novel 17$ 13 5 0 234 false 2018-2-11-12:57PM Ellis-Library
-
-13 Pride-and-Prejudice Jane-Austen Bildungsroman 15$ 20 11 0 323 false 2018-4-1-11:04AM Ellis-Library
-
-14 Harry-Potter-and-the-Philosopher’s-Stone J.K.-Rowling Adventure-Novel 30$ 32 25 0 451 false 2018-4-15-9:44AM Ellis-Library 
-
-15 Dragon-Raja-1 Jiang-Nan Adventure-Novel 18$ 20 13 0 123 false 2018-3-16-10:30PM Ellis-Library
-
-16 Dragon-Raja-2 Jiang-Nan Adventure-Novel 19$ 20 18 0 110 false 2018-2-19-11:12PM Ellis-Library
-
-17 Dragon-Raja-3 Jiang-Nan Adventure-Novel 23$ 20 10 0 181 false 2018-4-20-9:42PM Ellis-Library
-
-18 1984 George-Orwell War-Novel 18$ 34 28 0 178 false 2017-12-24-11:32AM Ellis-Library
-
-19 The-Adventure-of-Sherlock-Holmes Arthur-Conan-Doyle Adventure-Novel 15 10 0 120 false 2018-3-13-8:11AM Ellis-Library
-
-20 The-Old-Man-and-The-Sea Ernest-Miller-Hemingway War-Novel 10$ 20 13 0 123 false 2018-1-23-15:21PM Ellis-Library
+1 A-Certain-Magic-Index Kazuma-Kamachi Novel 15$ 10 7 150 false 2018-4-17-10:56AM Ellise-Library
+2 Around-the-World-in-Eighty-Days Jules-Gabriel-Verne Novel 20$ 2 0 21 false 2018-4-6-3:48PM Ellise-Library
+3 To-Kill-a-Mockingbird Harper-Lee Bildungsroman 10$ 10 7 189 false 2018-3-12-09:45AM Ellise-Library
+4 The-Hobbit J.R.R.-Tolkien Novel 17$ 13 5 234 false 2018-2-11-12:57PM Ellis-Library
+5 Pride-and-Prejudice Jane-Austen Bildungsroman 15$ 20 11 323 false 2018-4-1-11:04AM Ellis-Library
+6 Harry-Potter-and-the-Philosopher’s-Stone J.K.-Rowling Adventure 30$ 32 25 451 false 2018-4-15-9:44AM Ellise-Library 
+7 Dragon-Raja-1 Jiang-Nan Novel 18$ 20 13 123 false 2018-3-16-10:30PM Ellise-Library
+8 Dragon-Raja-2 Jiang-Nan Novel 19$ 20 18 110 false 2018-2-19-11:12PM Ellise-Library
+9 Dragon-Raja-3 Jiang-Nan Novel 23$ 20 10 181 false 2018-4-20-9:42PM Ellise-Library
+10 1984 George-Orwell War 18$ 34 28 178 false 2017-12-24-11:32AM Ellise-Library
+11 The-Adventure-of-Sherlock-Holmes Arthur-Conan-Doyle Adventure 15 10 120 false 2018-3-13-8:11AM Ellise-Library
+12 The-Old-Man-and-The-Sea Ernest-Miller-Hemingway Novel 10$ 20 13 123 false 2018-1-23-15:21PM Ellise-Library
+13 Beneath-a-Scarlet-Sky: A-Novel Literary 15.99$ 2 1 4 false 2018-3-27-2:15PM Ellise-Library
+14 Macbeth Jo-Nesbo Literary 17.70$ 1 1 3 false 2018-4-16-3:40PM Ellise-Library
+15 To-Kill-a-Mockingbird Harper-Lee Thrillers 20.57$ 3 0 8 false 2018-4-17-10:30AM Ellise-Library
+16 The-Immortalists Chloe-Benjamin Literary 18.20$ 4 2 6 false 2018-4-16-11:15AM Ellise-Library
+17 In-the-Absence-of-the-Sun Emily-Curtis Poetry 6.99$ 1 0 3 false 2018-4-15-5:00PM Ellise-Library
+18 The-Punishment-She-Deserves: A-Lynley-Novel Elizabeth-George Mystery 16.69$ 3 0 10 false 2018-4-16-6:20PM Ellise-Library
+19 Red-Rising Pierce-Brown Science 17.79$ 2 0 9 false 2018-4-10-1:30PM Ellise-Library
+20 Night Elie-Wiesel History 12.23$ 5 3 6 false 2018-4-5-10:00PM Ellise-Library
+21 Grant Ron-Chernow History 22.96$ 5 4 5 false 2018-4-7 11:30PM Ellise-Library
+22 Me-Talk-Pretty-One-Day David-Sedaris Correspondence 15.39$ 3 1 6 false 2018-4-13-9:45AM Ellise-Library
+23 Introduction-To-C++ Dong-Xu Programming 40$ 2 1 15 false 2018-4-12-10:30AM Engineering-Library
+24 University-Physics1 Yihe-Wang Physics 50$ 3 0 30 false 2018-1-2-10:32AM Engineering-Library
