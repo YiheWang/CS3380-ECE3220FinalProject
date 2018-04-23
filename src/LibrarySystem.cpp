@@ -21,9 +21,14 @@ using namespace std;
 
 string getLocalTime()
 {
-	string time;//fill this function later
-
-	return time;
+	string stime;//fill this function later
+    time_t rawtime;
+    struct tm * timeinfo;
+    
+    time (&rawtime);
+    timeinfo = localtime (&rawtime);
+    stime = asctime(timeinfo);
+	return stime;
 }
 
 class Book{
