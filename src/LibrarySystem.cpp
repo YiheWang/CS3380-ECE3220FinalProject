@@ -15,27 +15,36 @@
 #include <stdlib.h>
 #include <cmath>
 #include <ctime>
+#include <cstdlib>
+#include <cstring>
+#include <stdexcept>
+#include <iterator>
+
 using namespace std;
 
-string getLocalTime()
-{
-    time_t rawtime;
-    struct tm * timeinfo;
-    
-    time ( &rawtime );
-    timeinfo = localtime ( &rawtime );
-    string ftime;
-    char  *stime;
-    stime = asctime (timeinfo);
-    
-    for(int i =0; i<30;i++){
-        
-        if (stime[i] == ' ' )
-            stime [i] = '-';
+ostream& formatDateTime(ostream& out, const tm& t, const char* fmt) {
+    const time_put<char>& dateWriter = use_facet<time_put<char> >(out.getloc());
+    int n = strlen(fmt);
+    if (dateWriter.put(out, out, ' ', &t, fmt, fmt + n).failed()) {
+        throw runtime_error("failure to format date time");
     }
+    return out;
+}
+string dateTimeToString(const tm& t, const char* format) {
+    stringstream s;
+    formatDateTime(s, t, format);
+    return s.str();
+}
+
+tm now() {
+    time_t now = time(0);
+    return *localtime(&now);
+}
+
+string getlocaltime(){
     
-    ftime = stime;
-    return ftime;
+    string    s = dateTimeToString(now(), "%Y-%m-%d-%H:%M%p");
+    return s;
 }
 
 class Book{
