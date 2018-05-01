@@ -10,7 +10,7 @@
 10 1984 George-Orwell War 18$ 34 28 178 false 2017-12-24-11:32AM Ellise-Library
 11 The-Adventure-of-Sherlock-Holmes Arthur-Conan-Doyle Adventure 15 10 120 false 2018-3-13-8:11AM Ellise-Library
 12 The-Old-Man-and-The-Sea Ernest-Miller-Hemingway Novel 10$ 20 13 123 false 2018-1-23-15:21PM Ellise-Library
-13 Beneath-a-Scarlet-Sky: A-Novel Literary 15.99$ 2 1 4 false 2018-3-27-2:15PM Ellise-Library
+13 Beneath-a-Scarlet-Sky  Amanda-Goldberg A-Novel Literary 15.99$ 2 1 4 false 2018-3-27-2:15PM Ellise-Library
 14 Macbeth Jo-Nesbo Literary 17.70$ 1 1 3 false 2018-4-16-3:40PM Ellise-Library
 15 To-Kill-a-Mockingbird Harper-Lee Thrillers 20.57$ 3 0 8 false 2018-4-17-10:30AM Ellise-Library
 16 The-Immortalists Chloe-Benjamin Literary 18.20$ 4 2 6 false 2018-4-16-11:15AM Ellise-Library

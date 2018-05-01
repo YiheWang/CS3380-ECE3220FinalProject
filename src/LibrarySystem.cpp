@@ -21,7 +21,7 @@
 #include <iterator>
 
 using namespace std;
-
+/*
 ostream& formatDateTime(ostream& out, const tm& t, const char* fmt) {
     const time_put<char>& dateWriter = use_facet<time_put<char> >(out.getloc());
     int n = strlen(fmt);
@@ -41,10 +41,14 @@ tm now() {
     return *localtime(&now);
 }
 
-string getlocaltime(){
+string getLocalTime(){
     
     string    s = dateTimeToString(now(), "%Y-%m-%d-%H:%M%p");
     return s;
+}*/
+
+string getLocalTime(){
+	return "2018-4-23-10:23AM";
 }
 
 class Book{
@@ -384,6 +388,7 @@ class StudentSystem : public LibrarySystem{
 		void returnBook();//return a book
 		void removeHistory();//delete borrow history
 		void changePassword();//change the password of id
+		void removeBook(vector<int> bookId, int index);//will be called in return book
 	public:
 		//fill constructors here
 		StudentSystem(StudentList*,Student,int);
@@ -426,8 +431,12 @@ void StudentSystem::searchBook()
 				int id;
 				cout<<"Please enter the book id";
 				cin>>id;
-				bookList[id].printBookInfo();//print out new borrowed book
-				borrowBook(id);//call borrow book function
+				for(int i = 0; i < (int)bookList.size(); ++i){
+						if(bookList[i].getId() == id){
+						bookList[i].printBookInfo();
+						borrowBook(i);
+						}
+				}//search by name
 				break;
 			}
 			case 2:{
@@ -464,6 +473,38 @@ void StudentSystem::searchBook()
 	}
 }
 
+void StudentSystem::returnBook()
+{
+	int tempId;
+	vector<int> tempBookId;
+	tempBookId = student.getBookId();
+	cout<<"Here are the books you borrowed"<<endl;
+	for(int i = 0; i < (int)tempBookId.size(); ++i){
+		for(int j = 0; j < (int)bookList.size(); ++j){
+			if(bookList[j].getId() == tempBookId[i]){
+				bookList[j].printBookInfo();
+			}
+		}
+	}
+	cout<<"Which book you want to return? Please enter the book id";
+	cin>>tempId;
+	for(int k = 0; k < (int)bookList.size(); ++k){
+		if(bookList[k].getId() == tempId){
+			removeBook(student.getBookId(),k);
+			//bookList[k].printBookInfo();
+		}
+	}
+	cout<<"Return successfully!"<<endl;
+}
+
+void StudentSystem::removeBook(vector<int> bookId, int index)
+{
+	//int count = bookId.size() - index;
+	for(int i = index; i < (int)bookId.size(); ++i){
+
+	}
+}
+
 void StudentSystem::borrowBook(int id)
 {
 	int choice;
@@ -477,7 +518,10 @@ void StudentSystem::borrowBook(int id)
 				student.setLastBorrowTime(getLocalTime());
 				bookList[id].setLastBorrowTime(getLocalTime());//update borrow time
 				bookList[id].setNowNumber(--nowNumber);//update book number now
-		}//borrow this book
+			}//borrow this book
+			else{
+				return;
+			}
 	}
 	else{
 		cout<<"All "<<bookList[id].getName()<<" were borrowed,"
