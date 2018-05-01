@@ -531,9 +531,8 @@ void StudentSystem::borrowBook(int id)
 
 void StudentSystem::updateFile()
 {
-	studentList->list[indexInList] = student;//update student information
+	//update student information
 	//update all student information
-	ofstream out;
 	//rewrite the file studentInfo with new student data
 	//remember to upload the id
 	//
@@ -542,6 +541,50 @@ void StudentSystem::updateFile()
 	//remember to unload the id
 	//
 	//
+    studentList->list[indexInList] = student;
+    
+    string fileName1 = "StudentInfo.txt";
+    
+    ofstream outFS1;
+    outFS1.open(fileName1,std::ofstream::trunc);
+    if(!outFS.is_open()){
+        cout<<" Can not open File "<<fileName1<<"."<<endl;
+    }
+    for(int i = 0; i < studentList->list.size(); i++)
+    {
+        outFS<<studentList->list.pawPrint<<' ';
+        outFS<<studentList->list.password<<' ';
+        outFS<<studentList->list.name<<' ';
+        outFS<<studentList->list.historyBorrowNum<<' ';
+        outFS<<studentList->list.lastBorrowTime<<' ';
+        outFS<<studentList->list.holdNum<<' ';
+        for(int a =0;  a < studentList->list.bookId.size(); i++){
+            outFS<<studentList->list.bookId[i]<<' ';
+        }
+        outFS<<endl;
+    }
+    outFS1.close();
+    ofstream outFS2;
+    string fileName2 = "BookInfo.txt";
+    outFS2.open(fileName2,std::ofstream::trunc);
+    
+    for(int b = 0; b < bookList.size(); b++)
+    {
+        outFS2<<bookList[b].id<<' ';
+        outFS2<<bookList[b].name<<' ';
+        outFS2<<bookList[b].author<<' ';
+        outFS2<<bookList[b].category<<' ';
+        outFS2<<bookList[b].price<<' ';
+        outFS2<<bookList[b].sumNumber<<' ';
+        outFS2<<bookList[b].nowNumber<<' ';
+        outFS2<<bookList[b].borrowTimes<<' ';
+        outFS2<<bookList[b].ifReadOnly<<' ';
+        outFS2<<bookList[b].lastBorrowTime<<' ';
+        outFS2<<bookList[b].library<<' ';
+        outFS2<<endl;
+        
+    }
+    outFS2.close();
 }
 
 void StudentSystem::printMessage()
