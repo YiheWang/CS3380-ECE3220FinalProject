@@ -211,6 +211,7 @@ class Librarian{
 		string password;
 		string name;
 	public:
+		Librarian();
 		Librarian(string,string,string);
 		~Librarian();
 		string getPawPrint(){return pawPrint;}
@@ -220,6 +221,11 @@ class Librarian{
 		void setPassword(string password){this->password = password;}
 		void setName(string name){this->name =name;}
 };
+
+Librarian::Librarian()
+{
+	//do nothing
+}
 
 Librarian::Librarian(string pawPrint,string password,string name)
 {
@@ -615,47 +621,50 @@ void StudentSystem::updateFile()
     studentList->list[indexInList] = student;
     
     string fileName1 = "StudentInfo.txt";
-    /*
+
     ofstream outFS1;
     outFS1.open(fileName1,std::ofstream::trunc);
     if(!outFS1.is_open()){
         cout<<" Can not open File "<<fileName1<<"."<<endl;
     }
-    for(int i = 0; i < (int)studentList->list.size(); i++)
-    {
-        outFS1<<studentList->list.pawPrint<<' ';
-        outFS1<<studentList->list.password<<' ';
-        outFS1<<studentList->list.name<<' ';
-        outFS1<<studentList->list.historyBorrowNum<<' ';
-        outFS1<<studentList->list.lastBorrowTime<<' ';
-        outFS1<<studentList->list.holdNum<<' ';
-        for(int a =0;  a < studentList->list.bookId.size(); i++){
-            outFS1<<studentList->list.bookId[i]<<' ';
-        }
+    for(int i = 0; i < (int)studentList->list.size(); ++i){
+        outFS1<<studentList->list[i].getPawPrint();
+        outFS1<<studentList->list[i].getPassword();
+        outFS1<<studentList->list[i].getName();
+        outFS1<<studentList->list[i].getHistoryBorrowNum();
+        outFS1<<studentList->list[i].getLastBorrowTime();
+        outFS1<<studentList->list[i].getHoldNum();//rewrite all the information in order
+        vector<int> tempId = studentList->list[i].getBookId();
+        for(int j = 0;  j < (int)tempId.size(); ++j){
+            outFS1<<tempId[j];
+        }//rewrite all the borrowed books in order
         outFS1<<endl;
     }
     outFS1.close();
+
+
     ofstream outFS2;
     string fileName2 = "BookInfo.txt";
     outFS2.open(fileName2,std::ofstream::trunc);
+    //delete all the stuffs in file first
+    //then rewrite all the stuffs in the file
     
-    for(int b = 0; b < bookList.size(); b++)
-    {
-        outFS2<<bookList[b].id<<' ';
-        outFS2<<bookList[b].name<<' ';
-        outFS2<<bookList[b].author<<' ';
-        outFS2<<bookList[b].category<<' ';
-        outFS2<<bookList[b].price<<' ';
-        outFS2<<bookList[b].sumNumber<<' ';
-        outFS2<<bookList[b].nowNumber<<' ';
-        outFS2<<bookList[b].borrowTimes<<' ';
-        outFS2<<bookList[b].ifReadOnly<<' ';
-        outFS2<<bookList[b].lastBorrowTime<<' ';
-        outFS2<<bookList[b].library<<' ';
+    for(int i = 0; i < (int)bookList.size(); ++i){
+        outFS2<<bookList[i].getId();
+        outFS2<<bookList[i].getName();
+        outFS2<<bookList[i].getAuthor();
+        outFS2<<bookList[i].getCategory();
+        outFS2<<bookList[i].getPrice();
+        outFS2<<bookList[i].getSumNumber();
+        outFS2<<bookList[i].getNowNumber();
+        outFS2<<bookList[i].getBorrowTimes();
+        outFS2<<bookList[i].getIfReadOnly();
+        outFS2<<bookList[i].getLastBorrowTime();
+        outFS2<<bookList[i].getLibrary();
         outFS2<<endl;
         
     }
-    outFS2.close();*/
+    outFS2.close();
 }
 
 void StudentSystem::printMessage()
@@ -675,33 +684,65 @@ void StudentSystem::printMessage()
 
 class LibrarianSystem : public LibrarySystem{
 	private:
-		int pawPrint;
-		string password;
-		string name;
+		LibrarianList *librarianList;
+		Librarian librarian;
+		int indexInList;
+
+		void addNewBook();//add new book
+		void deleteBook();//delete book
+		void updateFile();//update the book information
 	public:
 		//fill constructors here
-
+		LibrarianSystem(LibrarianList*,Librarian,int);
+		~LibrarianSystem();
 
 		void printMessage();//override function
 		void printView();//override function
-		void addNewBook();//add new book
-		void deleteBook();//delete book
-		void updateBookInfo();//update the book information
+
 };
+
+LibrarianSystem::LibrarianSystem(LibrarianList* librarianList, Librarian librarian, int indexInList)
+{
+	this->librarianList = librarianList;
+	this->librarian = librarian;
+	this->indexInList = indexInList;
+}
+
+LibrarianSystem::~LibrarianSystem()
+{
+	updateFile();//update all information(librarian, book)
+	free(librarianList);
+}
+
+void LibrarianSystem::printView()
+{
+
+}
+
+void LibrarianSystem::addNewBook()
+{
+
+}
+
+void LibrarianSystem::deleteBook()
+{
+
+}
+
+void LibrarianSystem::updateFile()
+{
+
+}
+
+void LibrarianSystem::printMessage()
+{
+
+}
 
 int checkStudentIdentity(StudentList &studentList,string pawPrint,string password)
 {
-	int i = 0;
-	/*while(&(studentList.list[i]) != NULL){
-		if(studentList.list[i].getPawPrint() == pawPrint){
-			if(studentList.list[i].getPassword() == password){
-				return i;
-			}//check if the paw print and password match
-		}
-		++i;
-	}*/
 	int size = studentList.list.size();
-	for(i = 0; i < size; ++i){
+	for(int i = 0; i < size; ++i){
 		if(studentList.list[i].getPawPrint() == pawPrint){
 			if(studentList.list[i].getPassword() == password){
 				return i;
@@ -711,8 +752,22 @@ int checkStudentIdentity(StudentList &studentList,string pawPrint,string passwor
 	return -1;
 }//change to binary search later
 
+int checkLibrarianIdentity(LibrarianList &librarianList,string pawPrint,string password)
+{
+	int size = librarianList.list.size();
+		for(int i = 0; i < size; ++i){
+			if(librarianList.list[i].getPawPrint() == pawPrint){
+				if(librarianList.list[i].getPassword() == password){
+					return i;
+				}//check if the paw print and password match
+			}
+		}
+	return -1;
+}
+
 int main() {
 	StudentList studentList;
+	LibrarianList librarianList;
 	int identityChoice;
 	string pawPrint;
 	string password;
@@ -722,11 +777,12 @@ int main() {
 	cout<<"2)Librarian log in enter 2:";
 	cin>>identityChoice;
 
-	if(identityChoice ==1 ){
-		cout<<"Please enter your pawprint:";
-		cin>>pawPrint;
-		cout<<"Please enter your password:";
-		cin>>password;
+	cout<<"Please enter your pawprint:";
+	cin>>pawPrint;
+	cout<<"Please enter your password:";
+	cin>>password;
+
+	if(identityChoice == 1 ){
 		int index = checkStudentIdentity(studentList,pawPrint,password);
 		if(index < 0){
 			cout<<"Your User ID and/or Password are invalid."<<endl;
@@ -735,6 +791,17 @@ int main() {
 			StudentSystem studentSystem(&studentList,studentList.list[index],index);
 			cout<<"Welcome to library! What you want to do?"<<endl;
 			studentSystem.printView();
+		}
+	}
+	else if(identityChoice == 2){
+		int index = checkLibrarianIdentity(librarianList,pawPrint,password);
+		if(index < 0){
+			cout<<"Your User ID and/or Password are invalid."<<endl;
+		}
+		else{
+			LibrarianSystem librarianSystem(&librarianList,librarianList.list[index],index);
+			cout<<"Welcome to library! What you want to do?"<<endl;
+			librarianSystem.printView();
 		}
 	}
 
