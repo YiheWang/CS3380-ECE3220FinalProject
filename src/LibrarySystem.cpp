@@ -689,16 +689,24 @@ class LibrarianSystem : public LibrarySystem{
 		void updateBookInfo();//update the book information
 };
 
-int checkStudentIdentity(StudentList* studentList,string pawPrint,string password)
+int checkStudentIdentity(StudentList &studentList,string pawPrint,string password)
 {
 	int i = 0;
-	while(studentList != NULL){
-		if(studentList->list[i].getPawPrint() == pawPrint){
-			if(studentList->list[i].getPassword() == password){
+	/*while(&(studentList.list[i]) != NULL){
+		if(studentList.list[i].getPawPrint() == pawPrint){
+			if(studentList.list[i].getPassword() == password){
 				return i;
 			}//check if the paw print and password match
 		}
 		++i;
+	}*/
+	int size = studentList.list.size();
+	for(i = 0; i < size; ++i){
+		if(studentList.list[i].getPawPrint() == pawPrint){
+			if(studentList.list[i].getPassword() == password){
+				return i;
+			}//check if the paw print and password match
+		}
 	}
 	return -1;
 }//change to binary search later
@@ -719,7 +727,7 @@ int main() {
 		cin>>pawPrint;
 		cout<<"Please enter your password:";
 		cin>>password;
-		int index = checkStudentIdentity(&studentList,pawPrint,password);
+		int index = checkStudentIdentity(studentList,pawPrint,password);
 		if(index < 0){
 			cout<<"Your User ID and/or Password are invalid."<<endl;
 		}
