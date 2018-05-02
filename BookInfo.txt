@@ -15,7 +15,7 @@
 15 To-Kill-a-Mockingbird Harper-Lee Thrillers 20.57$ 3 0 8 false 2018-4-17-10:30AM Ellise-Library
 16 The-Immortalists Chloe-Benjamin Literary 18.20$ 4 2 6 false 2018-4-16-11:15AM Ellise-Library
 17 In-the-Absence-of-the-Sun Emily-Curtis Poetry 6.99$ 1 0 3 false 2018-4-15-5:00PM Ellise-Library
-18 The-Punishment-She-Deserves: A-Lynley-Novel Elizabeth-George Mystery 16.69$ 3 0 10 false 2018-4-16-6:20PM Ellise-Library
+18 The-Punishment-She-Deserves:A-Lynley-Novel Elizabeth-George Mystery 16.69$ 3 0 10 false 2018-4-16-6:20PM Ellise-Library
 19 Red-Rising Pierce-Brown Science 17.79$ 2 0 9 false 2018-4-10-1:30PM Ellise-Library
 20 Night Elie-Wiesel History 12.23$ 5 3 6 false 2018-4-5-10:00PM Ellise-Library
 21 Grant Ron-Chernow History 22.96$ 5 4 5 false 2018-4-7 11:30PM Ellise-Library

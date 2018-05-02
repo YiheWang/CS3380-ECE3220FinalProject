@@ -124,8 +124,17 @@ Book::~Book()
 
 void Book::printBookInfo()
 {
-    cout<<"id"<<id<<"name"<<name<<"author"<<author<<"category"<<category<<"price"<<price<<"sumNumber"<<sumNumber<<"nowNumber"<<nowNumber<<"borrowTimes"<<borrowTimes
-    <<"ifReadOnly"<<ifReadOnly<<"lastBorrowTime"<<lastBorrowTime<<"library"<<library<<endl;
+    cout<<"id:"<<id<<endl;
+    cout<<" name:"<<name<<endl;
+    cout<<" author:"<<author<<endl;
+    cout<<" category"<<category<<endl;
+    cout<<" price"<<price<<endl;
+    cout<<" sumNumber"<<sumNumber<<endl;
+    cout<<" nowNumber"<<nowNumber<<endl;
+    cout<<" borrowTimes"<<borrowTimes<<endl;
+    cout<<" ifReadOnly"<<ifReadOnly<<endl;
+    cout<<" lastBorrowTime"<<lastBorrowTime<<endl;
+    cout<<" library"<<library<<endl;
 }
 
 class Student{
@@ -141,6 +150,7 @@ class Student{
 		Student();
 		Student(string,string,string,int,string,int,vector<int>);
 		~Student();
+		void printStudentInfo();
 		string getPawPrint(){return pawPrint;}
 		string getPassword(){return password;}
 		string getName(){return name;}
@@ -179,6 +189,20 @@ Student::Student(string pawPrint,string password,string name,int historyBorrowNu
 Student::~Student()
 {
 	bookId.clear();
+}
+
+void Student::printStudentInfo()
+{
+	cout<<"Student pawPrint: "<<pawPrint<<endl;
+	cout<<"Student name: "<<name<<endl;
+	cout<<"History borrow number: "<<historyBorrowNum<<endl;
+	cout<<"Last time borrow: "<<lastBorrowTime<<endl;
+	cout<<"Holding book number: "<<holdNum<<endl;
+	cout<<"Borrowed books id: ";
+	for(int i = 0; i < holdNum; ++i){
+		cout<<bookId[i]<<" ";
+	}
+	cout<<endl<<endl;
 }
 
 class Librarian{
@@ -235,7 +259,9 @@ void StudentList::readFile()
 	in.open(fileName);
 	if(!in.is_open()){
 		cerr<<"File open failed!"<<endl;
+		return;
 	}
+
 
 	char line[1024];
 	while(!in.eof()){
@@ -254,16 +280,19 @@ void StudentList::readFile()
 		int holdNum;
 		word>>holdNum;
 		vector<int> bookId;
-		for(int i = holdNum; holdNum > 0;--i){
+		for(int i = 0; i < holdNum; ++i){
 			int temp;
 			word>>temp;
 			bookId.push_back(temp);
 		}
 
+
 		Student student(pawPrint,password,name,historyBorrowNum,
 				lastBorrowTime,holdNum,bookId);
 		list.push_back(student);
+		//student.printStudentInfo();
 	}//read the file until end and put it in object Book
+	in.close();
 }
 
 class LibrarianList{
@@ -308,6 +337,7 @@ void LibrarianList::readFile()
 		Librarian librarian(pawPrint,password,name);
 		list.push_back(librarian);
 	}//read the file until end and put it in object Book
+	in.close();
 }
 
 class LibrarySystem{
@@ -375,6 +405,7 @@ void LibrarySystem::readFile()
 				borrowTimes,ifReadOnly,lastBorrowTime,library);
 		bookList.push_back(book);//
 	}//read the file until end and put it in object Book
+	in.close();
 }
 
 class StudentSystem : public LibrarySystem{
@@ -388,7 +419,7 @@ class StudentSystem : public LibrarySystem{
 		void returnBook();//return a book
 		void removeHistory();//delete borrow history
 		void changePassword();//change the password of id
-		void removeBook(vector<int> bookId, int index);//will be called in return book
+		void removeBook(vector<int> &, int);//will be called in return book
 	public:
 		//fill constructors here
 		StudentSystem(StudentList*,Student,int);
@@ -412,12 +443,49 @@ StudentSystem::~StudentSystem()
 	free(studentList);
 }
 
+void StudentSystem::printView()
+{
+	int choice;
+	printMessage();
+	do{
+		cout<<"1)Search for books, enter 1:"<<endl;
+		cout<<"2)Borrow books,enter 2:"<<endl;
+		cout<<"3)Return books enter 3:"<<endl;
+		cout<<"4)See my status:"<<endl;
+		cout<<"5)Log out!"<<endl;
+		cout<<"What you want to do now? Please enter the choice to select:";
+		cin>>choice;
+		if(choice == 1){
+			searchBook();
+		}//search and borrow books
+		else if(choice == 2){
+			int id;
+			cout<<"Please enter the book id:";
+			cin>>id;
+			borrowBook(id);
+		}//borrow books
+		else if(choice == 3){
+			returnBook();
+		}//return books
+		else if(choice == 4){
+			printMessage();
+		}
+		else if(choice == 5){
+			break;
+		}//log out
+		else {
+			cout<<"Wrong input! Please enter again:";
+			cin>>choice;
+		}
+	}while(1);
+}
+
 void StudentSystem::searchBook()
 {
 	int searchType;
 	Book book;
-	cout<<"Search by id enter 1: ";
-	cout<<"Search by name enter 2: ";
+	cout<<"Search by id enter 1: "<<endl;
+	cout<<"Search by name enter 2: "<<endl;
 	cout<<"Search by category enter 3: ";
 	cin>>searchType;
 	if(searchType>3||searchType<1){
@@ -429,7 +497,7 @@ void StudentSystem::searchBook()
 			case 1:{
 				//search by id
 				int id;
-				cout<<"Please enter the book id";
+				cout<<"Please enter the book id:";
 				cin>>id;
 				for(int i = 0; i < (int)bookList.size(); ++i){
 						if(bookList[i].getId() == id){
@@ -476,8 +544,7 @@ void StudentSystem::searchBook()
 void StudentSystem::returnBook()
 {
 	int tempId;
-	vector<int> tempBookId;
-	tempBookId = student.getBookId();
+	vector<int> tempBookId = student.getBookId();
 	cout<<"Here are the books you borrowed"<<endl;
 	for(int i = 0; i < (int)tempBookId.size(); ++i){
 		for(int j = 0; j < (int)bookList.size(); ++j){
@@ -490,19 +557,21 @@ void StudentSystem::returnBook()
 	cin>>tempId;
 	for(int k = 0; k < (int)bookList.size(); ++k){
 		if(bookList[k].getId() == tempId){
-			removeBook(student.getBookId(),k);
+			removeBook(tempBookId,k);
+			student.setBookId(tempBookId);
 			//bookList[k].printBookInfo();
 		}
 	}
 	cout<<"Return successfully!"<<endl;
 }
 
-void StudentSystem::removeBook(vector<int> bookId, int index)
+void StudentSystem::removeBook(vector<int> &bookId, int index)
 {
 	//int count = bookId.size() - index;
 	for(int i = index; i < (int)bookId.size(); ++i){
-
+		bookId[i] = bookId[i+1];
 	}
+	bookId.pop_back();
 }
 
 void StudentSystem::borrowBook(int id)
@@ -518,6 +587,8 @@ void StudentSystem::borrowBook(int id)
 				student.setLastBorrowTime(getLocalTime());
 				bookList[id].setLastBorrowTime(getLocalTime());//update borrow time
 				bookList[id].setNowNumber(--nowNumber);//update book number now
+				cout<<"Borrow successfully!"<<endl;
+				student.printStudentInfo();
 			}//borrow this book
 			else{
 				return;
@@ -544,24 +615,24 @@ void StudentSystem::updateFile()
     studentList->list[indexInList] = student;
     
     string fileName1 = "StudentInfo.txt";
-    
+    /*
     ofstream outFS1;
     outFS1.open(fileName1,std::ofstream::trunc);
-    if(!outFS.is_open()){
+    if(!outFS1.is_open()){
         cout<<" Can not open File "<<fileName1<<"."<<endl;
     }
-    for(int i = 0; i < studentList->list.size(); i++)
+    for(int i = 0; i < (int)studentList->list.size(); i++)
     {
-        outFS<<studentList->list.pawPrint<<' ';
-        outFS<<studentList->list.password<<' ';
-        outFS<<studentList->list.name<<' ';
-        outFS<<studentList->list.historyBorrowNum<<' ';
-        outFS<<studentList->list.lastBorrowTime<<' ';
-        outFS<<studentList->list.holdNum<<' ';
+        outFS1<<studentList->list.pawPrint<<' ';
+        outFS1<<studentList->list.password<<' ';
+        outFS1<<studentList->list.name<<' ';
+        outFS1<<studentList->list.historyBorrowNum<<' ';
+        outFS1<<studentList->list.lastBorrowTime<<' ';
+        outFS1<<studentList->list.holdNum<<' ';
         for(int a =0;  a < studentList->list.bookId.size(); i++){
-            outFS<<studentList->list.bookId[i]<<' ';
+            outFS1<<studentList->list.bookId[i]<<' ';
         }
-        outFS<<endl;
+        outFS1<<endl;
     }
     outFS1.close();
     ofstream outFS2;
@@ -584,14 +655,14 @@ void StudentSystem::updateFile()
         outFS2<<endl;
         
     }
-    outFS2.close();
+    outFS2.close();*/
 }
 
 void StudentSystem::printMessage()
 {
 	cout<<"This is your current status"<<endl;
 	cout<<"Name: "<<student.getName()<<endl;
-	cout<<"Total times you borrowed book"<<student.getHistoryBorrowNum()<<endl;
+	cout<<"Total times you borrowed book: "<<student.getHistoryBorrowNum()<<endl;
 	cout<<"Last time borrowed book: "<<student.getLastBorrowTime()<<endl;
 	cout<<"Number of books you hold: "<<student.getHoldNum()<<endl;
 	cout<<"Here is name of books you keep: ";
@@ -638,8 +709,9 @@ int main() {
 	string pawPrint;
 	string password;
 
-	cout<<"1)Student log in enter 1 "<<endl;
-	cout<<"2)Librarian log in enter 2"<<endl;
+	cout<<"Welcome to MU library system!"<<endl;
+	cout<<"1)Student log in enter 1:"<<endl;
+	cout<<"2)Librarian log in enter 2:";
 	cin>>identityChoice;
 
 	if(identityChoice ==1 ){
@@ -654,9 +726,11 @@ int main() {
 		else{
 			StudentSystem studentSystem(&studentList,studentList.list[index],index);
 			cout<<"Welcome to library! What you want to do?"<<endl;
-
+			studentSystem.printView();
 		}
 	}
+
+	cout<<"Have a nice day!"<<endl;
 
 	return 0;
 }
