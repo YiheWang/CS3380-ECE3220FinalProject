@@ -807,7 +807,7 @@ void LibrarianSystem::updateFile()
 {
 	librarianList->list[indexInList] = librarian;
 
-	string fileName1 = "StudentInfo.txt";
+	string fileName1 = "LibrarianInfo.txt";
 
 	ofstream outFS1;
 	outFS1.open(fileName1,ios::trunc);
