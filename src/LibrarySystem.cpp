@@ -62,7 +62,6 @@ class Book{
 		int nowNumber;//the number of book in library now
 		//int appointNumber;//how many people appoint this book
 		int borrowTimes;//how many times this book was borrowed
-		bool ifReadOnly;//identify this book is read only or can be borrowed
 		string lastBorrowTime;//last time this book was borrowed
 		string library;//this book is in which library of University
 
@@ -70,7 +69,7 @@ class Book{
 		//fill constructors here
 		Book();
 		Book(int,string,string,string,double,
-				int,int,int,bool,string,string);
+				int,int,int,string,string);
 		~Book();
 		void printBookInfo();//print out book information
 		int getId(){return id;}
@@ -82,7 +81,6 @@ class Book{
 		int getNowNumber(){return nowNumber;}
 		//int getAppointNumber(){return appointNumber;}
 		int getBorrowTimes(){return borrowTimes;}
-		bool getIfReadOnly(){return ifReadOnly;}
 		string getLastBorrowTime(){return lastBorrowTime;}
 		string getLibrary(){return library;}
 		void setNowNumber(int nowNumber){this->nowNumber = nowNumber;}
@@ -102,7 +100,7 @@ Book::Book()
 
 Book::Book(int id, string name, string author, string category, double price,
 		int sumNumber, int nowNumber, int borrowTimes,
-		bool ifReadOnly, string lastBorrowTime, string library){
+		string lastBorrowTime, string library){
 	this->id = id;
 	this->name = name;
 	this->author = author;
@@ -112,7 +110,6 @@ Book::Book(int id, string name, string author, string category, double price,
 	this->nowNumber = nowNumber;
 	//this->appointNumber = appointNumber;
 	this->borrowTimes = borrowTimes;
-	this->ifReadOnly = ifReadOnly;
 	this->lastBorrowTime = lastBorrowTime;
 	this->library = library;
 }
@@ -127,14 +124,13 @@ void Book::printBookInfo()
     cout<<"id:"<<id<<endl;
     cout<<" name:"<<name<<endl;
     cout<<" author:"<<author<<endl;
-    cout<<" category"<<category<<endl;
-    cout<<" price"<<price<<endl;
-    cout<<" sumNumber"<<sumNumber<<endl;
-    cout<<" nowNumber"<<nowNumber<<endl;
-    cout<<" borrowTimes"<<borrowTimes<<endl;
-    cout<<" ifReadOnly"<<ifReadOnly<<endl;
-    cout<<" lastBorrowTime"<<lastBorrowTime<<endl;
-    cout<<" library"<<library<<endl;
+    cout<<" category:"<<category<<endl;
+    cout<<" price:"<<price<<endl;
+    cout<<" sumNumber:"<<sumNumber<<endl;
+    cout<<" nowNumber:"<<nowNumber<<endl;
+    cout<<" borrowTimes:"<<borrowTimes<<endl;
+    cout<<" lastBorrowTime:"<<lastBorrowTime<<endl;
+    cout<<" library:"<<library<<endl;
 }
 
 class Student{
@@ -265,7 +261,7 @@ void StudentList::readFile()
 	in.open(fileName);
 	if(!in.is_open()){
 		cerr<<"File open failed!"<<endl;
-		return;
+		throw 0;
 	}
 
 
@@ -327,6 +323,7 @@ void LibrarianList::readFile()
 	in.open(fileName);
 	if(!in.is_open()){
 		cerr<<"File open failed!"<<endl;
+		throw 0;
 	}
 
 	char line[1024];
@@ -378,6 +375,7 @@ void LibrarySystem::readFile()
 	in.open(fileName);
 	if(!in.is_open()){
 		cerr<<"File open failed!"<<endl;
+		throw 0;
 	}
 
 	char line[1024];
@@ -400,15 +398,13 @@ void LibrarySystem::readFile()
 		word>>nowNumber;
 		int borrowTimes;
 		word>>borrowTimes;
-		bool ifReadOnly;
-		word>>ifReadOnly;
 		string lastBorrowTime;
 		word>>lastBorrowTime;
 		string library;
 		word>>library;//read information word by word
 
 		Book book(id,name,author,category,price,sumNumber,nowNumber,
-				borrowTimes,ifReadOnly,lastBorrowTime,library);
+				borrowTimes,lastBorrowTime,library);
 		bookList.push_back(book);//
 	}//read the file until end and put it in object Book
 	in.close();
@@ -445,7 +441,6 @@ StudentSystem::StudentSystem(StudentList* studentList, Student student, int inde
 
 StudentSystem::~StudentSystem()
 {
-	updateFile();//update all information(student, book)
 	free(studentList);
 }
 
@@ -457,8 +452,8 @@ void StudentSystem::printView()
 		cout<<"1)Search for books, enter 1:"<<endl;
 		cout<<"2)Borrow books,enter 2:"<<endl;
 		cout<<"3)Return books enter 3:"<<endl;
-		cout<<"4)See my status:"<<endl;
-		cout<<"5)Log out!"<<endl;
+		cout<<"4)See my status enter 4:"<<endl;
+		cout<<"5)Log out enter 5:"<<endl;
 		cout<<"What you want to do now? Please enter the choice to select:";
 		cin>>choice;
 		if(choice == 1){
@@ -477,7 +472,9 @@ void StudentSystem::printView()
 			printMessage();
 		}
 		else if(choice == 5){
-			break;
+			updateFile();//update all information(student, book)
+			throw 'H';
+			//break;
 		}//log out
 		else {
 			cout<<"Wrong input! Please enter again:";
@@ -518,7 +515,7 @@ void StudentSystem::searchBook()
 				cout<<"Please enter the name as following format. "
 						"Capitalize each single word and use '-' to"
 						"connect each word like: Harry-Potter "<<endl;
-				cout<<"Please enter the name of this book";
+				cout<<"Please enter the name of this book:";
 				cin>>tempBookName;
 				for(int i = 0; i < (int)bookList.size(); ++i){
 					if(bookList[i].getName() == tempBookName){
@@ -531,7 +528,7 @@ void StudentSystem::searchBook()
 			case 3:{
 				string category;
 				int tempId;
-				cout<<"Please enter the category of this book";
+				cout<<"Please enter the category of this book:";
 				cin>>category;
 				for(int i = 0; i < (int)bookList.size(); ++i){
 					if(bookList[i].getCategory() == category){
@@ -556,15 +553,22 @@ void StudentSystem::returnBook()
 		for(int j = 0; j < (int)bookList.size(); ++j){
 			if(bookList[j].getId() == tempBookId[i]){
 				bookList[j].printBookInfo();
-			}
+			}//print out the books you borrowed
 		}
 	}
-	cout<<"Which book you want to return? Please enter the book id";
+	cout<<"Which book you want to return? Please enter the book id:";
 	cin>>tempId;
-	for(int k = 0; k < (int)bookList.size(); ++k){
-		if(bookList[k].getId() == tempId){
+	for(int k = 0; k < (int)tempBookId.size(); ++k){
+		if(tempBookId[k] == tempId){
 			removeBook(tempBookId,k);
 			student.setBookId(tempBookId);
+			student.setHoldNum(student.getHoldNum() - 1);
+			for(int j = 0; j < (int)bookList.size(); ++j){
+					if(bookList[j].getId() == tempBookId[k]){
+					bookList[j].setNowNumber(bookList[j].getNowNumber() + 1);
+				}
+			}
+			//printMessage();
 			//bookList[k].printBookInfo();
 		}
 	}
@@ -585,16 +589,17 @@ void StudentSystem::borrowBook(int id)
 	int choice;
 	int nowNumber = bookList[id].getNowNumber();
 	if(nowNumber){
-		cout<<"Do you want to borrow "<<bookList[id].getName()<<"? Yes:1, No:0";
+		cout<<"Do you want to borrow "<<bookList[id].getName()<<"? Yes:1, No:0:";
 		cin>>choice;
 			if(choice == 1){
 				student.getBookId().push_back(id);
 				student.setHistoryBorrowNum(student.getHistoryBorrowNum() + 1);
-				student.setLastBorrowTime(getLocalTime());
-				bookList[id].setLastBorrowTime(getLocalTime());//update borrow time
+				student.setHoldNum(student.getHoldNum() + 1);
+				//student.setLastBorrowTime(getLocalTime());
+				//bookList[id].setLastBorrowTime(getLocalTime());//update borrow time
 				bookList[id].setNowNumber(--nowNumber);//update book number now
 				cout<<"Borrow successfully!"<<endl;
-				student.printStudentInfo();
+				printMessage();
 			}//borrow this book
 			else{
 				return;
@@ -623,46 +628,49 @@ void StudentSystem::updateFile()
     string fileName1 = "StudentInfo.txt";
 
     ofstream outFS1;
-    outFS1.open(fileName1,std::ofstream::trunc);
+    outFS1.open(fileName1,ios::trunc);
     if(!outFS1.is_open()){
         cout<<" Can not open File "<<fileName1<<"."<<endl;
     }
-    for(int i = 0; i < (int)studentList->list.size(); ++i){
-        outFS1<<studentList->list[i].getPawPrint();
-        outFS1<<studentList->list[i].getPassword();
-        outFS1<<studentList->list[i].getName();
-        outFS1<<studentList->list[i].getHistoryBorrowNum();
-        outFS1<<studentList->list[i].getLastBorrowTime();
-        outFS1<<studentList->list[i].getHoldNum();//rewrite all the information in order
+    int i;
+    for(i = 0; i < (int)studentList->list.size(); ++i){
+        outFS1<<studentList->list[i].getPawPrint()<<" ";
+        outFS1<<studentList->list[i].getPassword()<<" ";
+        outFS1<<studentList->list[i].getName()<<" ";
+        outFS1<<studentList->list[i].getHistoryBorrowNum()<<" ";
+        outFS1<<studentList->list[i].getLastBorrowTime()<<" ";
+        outFS1<<studentList->list[i].getHoldNum()<<" ";//rewrite all the information in order
         vector<int> tempId = studentList->list[i].getBookId();
-        for(int j = 0;  j < (int)tempId.size(); ++j){
-            outFS1<<tempId[j];
+        for(int j = 0;  j < studentList->list[i].getHoldNum(); ++j){
+            outFS1<<tempId[j]<<" ";
         }//rewrite all the borrowed books in order
-        outFS1<<endl;
+        if(i != (int)studentList->list.size() -1){
+        	outFS1<<endl;
+        }
     }
     outFS1.close();
 
 
     ofstream outFS2;
     string fileName2 = "BookInfo.txt";
-    outFS2.open(fileName2,std::ofstream::trunc);
+    outFS2.open(fileName2,ios::trunc);
     //delete all the stuffs in file first
     //then rewrite all the stuffs in the file
-    
-    for(int i = 0; i < (int)bookList.size(); ++i){
-        outFS2<<bookList[i].getId();
-        outFS2<<bookList[i].getName();
-        outFS2<<bookList[i].getAuthor();
-        outFS2<<bookList[i].getCategory();
-        outFS2<<bookList[i].getPrice();
-        outFS2<<bookList[i].getSumNumber();
-        outFS2<<bookList[i].getNowNumber();
-        outFS2<<bookList[i].getBorrowTimes();
-        outFS2<<bookList[i].getIfReadOnly();
-        outFS2<<bookList[i].getLastBorrowTime();
-        outFS2<<bookList[i].getLibrary();
-        outFS2<<endl;
-        
+    int j;
+    for(j = 0; j < (int)bookList.size(); ++j){
+        outFS2<<bookList[j].getId()<<" ";
+        outFS2<<bookList[j].getName()<<" ";
+        outFS2<<bookList[j].getAuthor()<<" ";
+        outFS2<<bookList[j].getCategory()<<" ";
+        outFS2<<bookList[j].getPrice()<<" ";
+        outFS2<<bookList[j].getSumNumber()<<" ";
+        outFS2<<bookList[j].getNowNumber()<<" ";
+        outFS2<<bookList[j].getBorrowTimes()<<" ";
+        outFS2<<bookList[j].getLastBorrowTime()<<" ";
+        outFS2<<bookList[j].getLibrary()<<" ";
+        if(j != (int)bookList.size() -1){
+        	outFS2<<endl;
+        }
     }
     outFS2.close();
 }
@@ -710,18 +718,84 @@ LibrarianSystem::LibrarianSystem(LibrarianList* librarianList, Librarian librari
 
 LibrarianSystem::~LibrarianSystem()
 {
-	updateFile();//update all information(librarian, book)
 	free(librarianList);
 }
 
 void LibrarianSystem::printView()
 {
-
+	int choice;
+	printMessage();
+	do{
+		cout<<"1)Add new book, enter 1:"<<endl;
+		cout<<"2)Delete book,enter 2:"<<endl;
+		cout<<"3)Log out enter 3:"<<endl;
+		cout<<"What you want to do now? Please enter the choice to select:";
+		cin>>choice;
+		if(choice == 1){
+			addNewBook();
+		}//search and borrow books
+		else if(choice == 2){
+			deleteBook();
+		}//borrow books
+		else if(choice == 3){
+			updateFile();//update all information(librarian, book)
+			throw 'H';
+		}//return books
+		else {
+			cout<<"Wrong input! Please enter again:";
+			cin>>choice;
+		}
+	}while(1);
 }
 
 void LibrarianSystem::addNewBook()
 {
+	int choice;
 
+	int id;
+	string name;
+	string author;
+	string category;
+	double price;
+	int sumNumber;
+	int nowNumber;
+	int borrowTimes;
+	string lastBorrowTime;
+	string library;
+	cout<<"Please enter the new book information:"<<endl;
+	cout<<"id:";
+	cin>>id;
+	cout<<"name:";
+	cin>>name;
+	cout<<"author:";
+	cin>>author;
+	cout<<"category:";
+	cin>>category;
+	cout<<"price:";
+	cin>>price;
+	cout<<"sumNumber:";
+	cin>>sumNumber;
+	cout<<"nowNumber:";
+	cin>>nowNumber;
+	cout<<"borrowTimes:";
+	cin>>borrowTimes;
+	cout<<"lastBorrowTime:";
+	cin>>lastBorrowTime;
+	cout<<"library:";
+	cin>>library;
+	cout<<endl;
+	Book book(id,name,author,category,price,sumNumber,nowNumber,
+							borrowTimes,lastBorrowTime,library);
+	book.printBookInfo();
+	cout<<"Add this book? Yes:1, No:0 :";
+	cin>>choice;
+	if(choice == 1){
+		bookList.push_back(book);
+		cout<<"Add successfully!"<<endl;
+	}
+	else if(choice == 0){
+		return;
+	}
 }
 
 void LibrarianSystem::deleteBook()
@@ -731,7 +805,50 @@ void LibrarianSystem::deleteBook()
 
 void LibrarianSystem::updateFile()
 {
+	librarianList->list[indexInList] = librarian;
 
+	string fileName1 = "StudentInfo.txt";
+
+	ofstream outFS1;
+	outFS1.open(fileName1,ios::trunc);
+	if(!outFS1.is_open()){
+	    cout<<" Can not open File "<<fileName1<<"."<<endl;
+	}
+		int i;
+	    for(i = 0; i < (int)librarianList->list.size(); ++i){
+	        outFS1<<librarianList->list[i].getPawPrint()<<" ";
+	        outFS1<<librarianList->list[i].getPassword()<<" ";
+	        outFS1<<librarianList->list[i].getName()<<" ";
+	        if(i != (int)librarianList->list.size() -1){
+	             outFS1<<endl;
+	        }
+	    }
+	    outFS1.close();
+
+
+	    ofstream outFS2;
+	    string fileName2 = "BookInfo.txt";
+	    outFS2.open(fileName2,ios::trunc);
+	    //delete all the stuffs in file first
+	    //then rewrite all the stuffs in the file
+
+	    int j;
+	    for(j = 0; j < (int)bookList.size(); ++j){
+	        outFS2<<bookList[j].getId()<<" ";
+	        outFS2<<bookList[j].getName()<<" ";
+	        outFS2<<bookList[j].getAuthor()<<" ";
+	        outFS2<<bookList[j].getCategory()<<" ";
+	        outFS2<<bookList[j].getPrice()<<" ";
+	        outFS2<<bookList[j].getSumNumber()<<" ";
+	        outFS2<<bookList[j].getNowNumber()<<" ";
+	        outFS2<<bookList[j].getBorrowTimes()<<" ";
+	        outFS2<<bookList[j].getLastBorrowTime()<<" ";
+	        outFS2<<bookList[j].getLibrary()<<" ";
+	        if(j != (int)bookList.size() -1){
+	              outFS2<<endl;
+	        }
+	    }
+	    outFS2.close();
 }
 
 void LibrarianSystem::printMessage()
@@ -772,6 +889,7 @@ int main() {
 	string pawPrint;
 	string password;
 
+
 	cout<<"Welcome to MU library system!"<<endl;
 	cout<<"1)Student log in enter 1:"<<endl;
 	cout<<"2)Librarian log in enter 2:";
@@ -786,23 +904,41 @@ int main() {
 		int index = checkStudentIdentity(studentList,pawPrint,password);
 		if(index < 0){
 			cout<<"Your User ID and/or Password are invalid."<<endl;
+			return 0;
 		}
-		else{
-			StudentSystem studentSystem(&studentList,studentList.list[index],index);
-			cout<<"Welcome to library! What you want to do?"<<endl;
-			studentSystem.printView();
+
+		try{
+		StudentSystem studentSystem(&studentList,studentList.list[index],index);
+		cout<<"Welcome to library! What you want to do?"<<endl;
+		studentSystem.printView();
+		}catch(int){
+			cout<<"File open falied!"<<endl;
+		}catch(char){
+			cout<<"Log out successfully!"<<endl;
+		}catch(...){
+			cout<<"general exception"<<endl;
 		}
+
 	}
 	else if(identityChoice == 2){
 		int index = checkLibrarianIdentity(librarianList,pawPrint,password);
 		if(index < 0){
 			cout<<"Your User ID and/or Password are invalid."<<endl;
+			return 0;
 		}
-		else{
-			LibrarianSystem librarianSystem(&librarianList,librarianList.list[index],index);
-			cout<<"Welcome to library! What you want to do?"<<endl;
-			librarianSystem.printView();
+
+		try{
+		LibrarianSystem librarianSystem(&librarianList,librarianList.list[index],index);
+		cout<<"Welcome to library! What you want to do?"<<endl;
+		librarianSystem.printView();
+		}catch(int){
+			cout<<"File open falied!"<<endl;
+		}catch(char){
+			cout<<"Log out successfully!"<<endl;
+		}catch(...){
+			cout<<"general exception"<<endl;
 		}
+
 	}
 
 	cout<<"Have a nice day!"<<endl;
