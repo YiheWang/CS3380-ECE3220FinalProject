@@ -366,13 +366,13 @@ class LibrarySystem{
 		void readFile();//read the file store the book information
 	protected:
 		vector<Book> bookList;
-
-		virtual void printMessage() = 0;//pure virtual function
-		virtual void printView() = 0;//pure virtual function
-		virtual void updateFile() = 0;//update changed information into file
 	public:
 		LibrarySystem();
 		virtual ~LibrarySystem();
+		virtual void printView() = 0;//pure virtual function
+		virtual void printMessage() = 0;//pure virtual function
+		virtual void updateFile() = 0;//update changed information into file
+		virtual void dynamicBinding() = 0;
 
 };
 
@@ -448,6 +448,7 @@ class StudentSystem : public LibrarySystem{
 		void printView();//call private class method to show different choices
 		//create the scene of student view and print out the choices, override function
 		void updateFile();
+		void dynamicBinding();
 };
 
 StudentSystem::StudentSystem(StudentList* studentList, Student student, int indexInList)
@@ -460,6 +461,11 @@ StudentSystem::StudentSystem(StudentList* studentList, Student student, int inde
 StudentSystem::~StudentSystem()
 {
 	free(studentList);
+}
+
+void StudentSystem::dynamicBinding()
+{
+	cout<<"This is a dynamic binding!"<<endl<<endl;
 }
 
 void StudentSystem::printView()
@@ -523,7 +529,7 @@ void StudentSystem::searchBook()
 				for(int i = 0; i < (int)bookList.size(); ++i){
 						if(bookList[i].getId() == id){
 						bookList[i].printBookInfo();
-						borrowBook(i);
+						borrowBook(id);
 						}
 				}//search by name
 				break;
@@ -566,18 +572,23 @@ void StudentSystem::returnBook()
 {
 	int tempId;
 	vector<int> tempBookId = student.getBookId();
-	cout<<"Here are the books you borrowed"<<endl;
+	cout<<"Here are the books you borrowed"<<endl<<endl;
 	for(int i = 0; i < (int)tempBookId.size(); ++i){
 		for(int j = 0; j < (int)bookList.size(); ++j){
 			if(bookList[j].getId() == tempBookId[i]){
+				cout<<"Book1"<<endl;
 				bookList[j].printBookInfo();
+				cout<<endl;
 			}//print out the books you borrowed
 		}
 	}
+
+	bool flag = false;//check if this book is in our borrowed list
 	cout<<"Which book you want to return? Please enter the book id:";
 	cin>>tempId;
 	for(int k = 0; k < (int)tempBookId.size(); ++k){
 		if(tempBookId[k] == tempId){
+			flag = true;
 			removeBook(tempBookId,k);
 			student.setBookId(tempBookId);
 			student.setHoldNum(student.getHoldNum() - 1);
@@ -590,7 +601,12 @@ void StudentSystem::returnBook()
 			//bookList[k].printBookInfo();
 		}
 	}
-	cout<<"Return successfully!"<<endl;
+	if(flag){
+		cout<<"Return successfully!"<<endl;
+	}
+	else{
+		cout<<"This book is not the books you borrowed!"<<endl;
+	}
 }
 
 void StudentSystem::removeBook(vector<int> &bookId, int index)
@@ -610,7 +626,11 @@ void StudentSystem::borrowBook(int id)
 		cout<<"Do you want to borrow "<<bookList[id].getName()<<"? Yes:1, No:0:";
 		cin>>choice;
 			if(choice == 1){
-				student.getBookId().push_back(id);
+				vector<int> temp = student.getBookId();
+				//student.getBookId().push_back(id);
+				temp.push_back(id);
+				cout<<"new id is:"<<temp[3]<<endl;
+				student.setBookId(temp);
 				student.setHistoryBorrowNum(student.getHistoryBorrowNum() + 1);
 				student.setHoldNum(student.getHoldNum() + 1);
 				//student.setLastBorrowTime(getLocalTime());
@@ -659,7 +679,7 @@ void StudentSystem::updateFile()
         outFS1<<studentList->list[i].getLastBorrowTime()<<" ";
         outFS1<<studentList->list[i].getHoldNum()<<" ";//rewrite all the information in order
         vector<int> tempId = studentList->list[i].getBookId();
-        for(int j = 0;  j < studentList->list[i].getHoldNum(); ++j){
+        for(int j = 0;  j < (int)tempId.size(); ++j){
             outFS1<<tempId[j]<<" ";
         }//rewrite all the borrowed books in order
         if(i != (int)studentList->list.size() -1){
@@ -703,7 +723,12 @@ void StudentSystem::printMessage()
 	cout<<"Here is name of books you keep: ";
 	vector<int> bookId = student.getBookId();
 	for(int i = 0; i<student.getHoldNum(); ++i){
-		cout<<bookList[bookId[i]].getName()<<" ";
+		for(int j = 0; j <(int)bookList.size(); ++j){
+			if(bookList[j].getId() == bookId[i]){
+				cout<<bookList[j].getName()<<" ";
+			}
+		}
+
 	}
 	cout<<endl;
 }
@@ -724,6 +749,7 @@ class LibrarianSystem : public LibrarySystem{
 
 		void printMessage();//override function
 		void printView();//override function
+		void dynamicBinding();
 
 };
 
@@ -737,6 +763,11 @@ LibrarianSystem::LibrarianSystem(LibrarianList* librarianList, Librarian librari
 LibrarianSystem::~LibrarianSystem()
 {
 	free(librarianList);
+}
+
+void LibrarianSystem::dynamicBinding()
+{
+	cout<<"This is a dynamic binding!"<<endl<<endl;
 }
 
 void LibrarianSystem::printView()
@@ -874,7 +905,7 @@ void LibrarianSystem::printMessage()
 
 }
 
-int checkStudentIdentity(StudentList &studentList,string pawPrint,string password)
+int checkIdentity(StudentList &studentList,string pawPrint,string password)
 {
 	int size = studentList.list.size();
 	for(int i = 0; i < size; ++i){
@@ -887,7 +918,7 @@ int checkStudentIdentity(StudentList &studentList,string pawPrint,string passwor
 	return -1;
 }//change to binary search later
 
-int checkLibrarianIdentity(LibrarianList &librarianList,string pawPrint,string password)
+int checkIdentity(LibrarianList &librarianList,string pawPrint,string password)
 {
 	int size = librarianList.list.size();
 		for(int i = 0; i < size; ++i){
@@ -903,6 +934,7 @@ int checkLibrarianIdentity(LibrarianList &librarianList,string pawPrint,string p
 int main() {
 	StudentList studentList;
 	LibrarianList librarianList;
+	LibrarySystem *librarySystem = (LibrarySystem *)malloc(sizeof(LibrarySystem));
 	int identityChoice;
 	string pawPrint;
 	string password;
@@ -919,7 +951,7 @@ int main() {
 	cin>>password;
 
 	if(identityChoice == 1 ){
-		int index = checkStudentIdentity(studentList,pawPrint,password);
+		int index = checkIdentity(studentList,pawPrint,password);
 		if(index < 0){
 			cout<<"Your User ID and/or Password are invalid."<<endl;
 			return 0;
@@ -928,6 +960,8 @@ int main() {
 		try{
 		StudentSystem studentSystem(&studentList,studentList.list[index],index);
 		cout<<"Welcome to library! What you want to do?"<<endl;
+		librarySystem = &studentSystem;
+		librarySystem->dynamicBinding();
 		studentSystem.printView();
 		}catch(int){
 			cout<<"File open falied!"<<endl;
@@ -939,7 +973,7 @@ int main() {
 
 	}
 	else if(identityChoice == 2){
-		int index = checkLibrarianIdentity(librarianList,pawPrint,password);
+		int index = checkIdentity(librarianList,pawPrint,password);
 		if(index < 0){
 			cout<<"Your User ID and/or Password are invalid."<<endl;
 			return 0;
@@ -948,6 +982,9 @@ int main() {
 		try{
 		LibrarianSystem librarianSystem(&librarianList,librarianList.list[index],index);
 		cout<<"Welcome to library! What you want to do?"<<endl;
+		librarySystem = &librarianSystem;
+		librarySystem->dynamicBinding();
+		librarianSystem.printMessage();
 		librarianSystem.printView();
 		}catch(int){
 			cout<<"File open falied!"<<endl;
