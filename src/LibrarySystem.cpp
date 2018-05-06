@@ -86,12 +86,30 @@ class Book{
 		void setNowNumber(int nowNumber){this->nowNumber = nowNumber;}
 		//void setAppointNumber(int appointNumber){this->appointNumber = appointNumber;}
 		void setLastBorrowTime(string lastBorrowTime){this->lastBorrowTime = lastBorrowTime;}
+        void operator+(const Book &book1);
+    
+    
 		//fill all the getter and setter
 		//
 		//
 		//
 		//
 };
+
+
+Book operator+(const Book &book1, const Book &book2)
+{
+    Book sum;
+    sum.price = book1.price + book2.price
+    return sum;
+}
+
+
+void Book::operator+(const Book &book1)
+{
+    this->price += book1.price;
+}
+
 
 Book::Book()
 {
